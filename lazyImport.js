@@ -35,12 +35,21 @@ const wrap = (component, executeResolve) => {
       }
     },
     {
-      observerOptions: { rootMargin: process.env.NUXT_SPEEDKIT_LAZY_OFFSET_COMPONENT || '0%' }
+      observerOptions: { rootMargin: '0%' }
     }
   )
 }
 
-export default component => {
+/**
+ * @description 
+ * - Ensures that components are initialized only when needed in the visible viewport.
+ * - Optimizes initialization of critical components on initial page load (critical components are initially in the visible viewport).
+ * @example
+ * components: {
+ *  Footer: lazyImport(() => import('@/components/Footer.vue'))
+ * } 
+ */
+const lazyImport = component => {
   if (isDev) {
     // important for clean hot reload in dev
     return component
@@ -60,3 +69,5 @@ export default component => {
     }
   }
 }
+
+export default lazyImport
